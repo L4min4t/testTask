@@ -11,3 +11,12 @@
 /testTask/obj
 /testTask/obj/Debug/net8.0
 /testTask/obj
+*.targets
+testTask/obj/Debug/net8.0/testTask.AssemblyInfo.cs
+testTask/obj/Debug/net8.0/testTask.AssemblyInfo.cs
+testTask/obj/Debug/net8.0/testTask.AssemblyInfo.cs
+testTask/obj/Debug/net8.0/testTask.AssemblyInfoInputs.cache
+testTask/obj/Debug/net8.0/testTask.assets.cache
+testTask/obj/Debug/net8.0/testTask.GeneratedMSBuildEditorConfig.editorconfig
+testTask/obj/project.assets.json
+testTask/obj/project.nuget.cache
