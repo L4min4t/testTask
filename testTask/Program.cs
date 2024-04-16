@@ -15,13 +15,9 @@ builder.Services.AddDbContext<ApplicationContext>(options =>
 
 builder.Services.AddScoped<IFilmRepository, FilmRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-builder.Services.AddScoped<IFilmCategoryRepository, FilmCategoryRepository>();
 
 builder.Services.AddScoped<IFilmService, FilmService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
-builder.Services.AddScoped<IFilmCategoryService, FilmCategoryService>();
-
-
 
 var app = builder.Build();
 

@@ -7,5 +7,8 @@ by editing this MSBuild file. In order to learn more about this please visit htt
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
     <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAxC32kGSWSEmq1/UIkjwIyAAAAAACAAAAAAAQZgAAAAEAACAAAADj+AONfJzMC0ieMfS1iawQ13v1IYTx547XipJBZh2X+gAAAAAOgAAAAAIAACAAAADLm3qV5fbs77BNNZi9L7T3KtKuBmXxNCwjT6JxaeMDXSAAAAD24yB1F5OePd2MScaYJUPQoxlq3Jd+d0xTWIH9hPV3FUAAAABAuVR4BKwyCZOteDXOYCO4rcQeNanb8Ji6eJTppxGqM1ZeWboqZ7k9+hW/wKtlEbc4YX7RtubajgV/vaVkY+wI</EncryptedPassword>
+    <_PublishTargetUrl>ftp://win6081.site4now.net:21/testtaskitexpert</_PublishTargetUrl>
+    <History>False|2024-04-16T21:59:09.0170078Z;</History>
+    <LastFailureDetails />
   </PropertyGroup>
 </Project>

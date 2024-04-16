@@ -11,6 +11,5 @@ public class FilmRepository : BaseRepository<Film>, IFilmRepository
     {
     }
 
-    public override async Task<List<Film>?> FindAllAsync() => await DbSet.Include(f => f.FilmCategories).ThenInclude
-        (fc => fc.Category).ToListAsync();
+    public override async Task<List<Film>?> FindAllAsync() => await DbSet.Include(f => f.Categories).ToListAsync();
 }

@@ -11,7 +11,6 @@ public class ApplicationContext : DbContext
 
     public DbSet<Film> Films { get; set; }
     public DbSet<Category> Categories { get; set; }
-    public DbSet<FilmCategory> FilmCategories { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -39,24 +38,27 @@ public class ApplicationContext : DbContext
                 .IsRequired(false);
         });
 
-        modelBuilder.Entity<FilmCategory>(entity =>
-        {
-            entity.HasKey(e => e.Id);
-
-            entity.Property(e => e.Id)
-                .ValueGeneratedOnAdd();
-
-            entity.HasKey(fc => new { fc.FilmId, fc.CategoryId });
-
-            entity.HasOne(fc => fc.Film)
-                .WithMany(f => f.FilmCategories)
-                .HasForeignKey(fc => fc.FilmId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            entity.HasOne(fc => fc.Category)
-                .WithMany(c => c.FilmCategories)
-                .HasForeignKey(fc => fc.CategoryId)
-                .OnDelete(DeleteBehavior.Cascade);
-        });
+        modelBuilder.Entity<Film>()
+            .HasMany(f => f.Categories)
+            .WithMany(c => c.Films)
+            .UsingEntity<Dictionary<string, object>>(
+                "FilmCategory",
+                j => j
+                    .HasOne<Category>()
+                    .WithMany()
+                    .HasForeignKey("CategoryId")
+                    .HasConstraintName("FK_FilmCategory_CategoryId")
+                    .OnDelete(DeleteBehavior.Cascade),
+                j => j
+                    .HasOne<Film>()
+                    .WithMany()
+                    .HasForeignKey("FilmId")
+                    .HasConstraintName("FK_FilmCategory_FilmId")
+                    .OnDelete(DeleteBehavior.Cascade),
+                j =>
+                {
+                    j.ToTable("FilmCategories");
+                    j.HasKey("FilmId", "CategoryId");
+                });
     }
 }

@@ -11,6 +11,6 @@ namespace testTask.Entities
         public int? ParentCategoryId { get; set; }
         public Category ParentCategory { get; set; }
 
-        public ICollection<FilmCategory> FilmCategories { get; set; }
+        public ICollection<Film> Films { get; set; }
     }
 }

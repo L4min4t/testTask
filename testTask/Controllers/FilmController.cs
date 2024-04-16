@@ -37,4 +37,17 @@ public class FilmController : Controller
 
         return View(filmModel);
     }
+    
+    [HttpDelete]
+    public async Task<IActionResult> Delete(int id)
+    {
+        await _service.DeleteAsync(id);
+        return RedirectToAction("Index");
+    }
+
+    public async Task<IActionResult> Edit(int id)
+    {
+        var film = await _service.FindByIdAsync(id);
+        return View(film);
+    }
 }

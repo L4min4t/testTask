@@ -11,5 +11,5 @@ public class Film : IEntity
     public string Director { get; set; }
     public DateTime Release { get; set; }
 
-    public ICollection<FilmCategory> FilmCategories { get; set; }
+    public ICollection<Category> Categories { get; set; }
 }
