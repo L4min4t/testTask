@@ -1,0 +1,10 @@
+
+*.dll
+*.bin
+
+/.idea
+
+/.vs
+
+/testTask/bin
+/testTask/obj
