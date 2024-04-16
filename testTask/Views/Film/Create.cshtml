@@ -1,0 +1,63 @@
+@model CreateFilmModel
+
+<form id="film-form" asp-controller="Film" asp-action="Create" method="post" class="w-50 mx-auto mt-5">
+    <div class="form-group">
+        <label for="Name" class="fs-5">Name</label>
+        <input type="text" asp-for="Name" class="form-control"/>
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group ">
+        <label for="Director" class="fs-5">Director</label>
+        <input type="text" asp-for="Director" class="form-control"/>
+        <span asp-validation-for="Director" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Release" class="fs-5">Release Date</label>
+        <input type="date" asp-for="Release" class="form-control"/>
+        <span asp-validation-for="Release" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="FilmCategories" class="fs-5">Categories</label>
+        <div id="category-checkboxes">
+            <div id="loading-spinner" style="display: none;">
+                <i class="fa fa-spinner fa-spin"></i> Loading Categories...
+            </div>
+        </div>
+        <span asp-validation-for="FilmCategories" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>
+
+
+<script>
+    document.getElementById('loading-spinner').style.display = 'block';
+    
+    fetch('/api/CategoryApi')
+        .then(response => response.json())
+        .then(categories => {
+            const categoryCheckboxes = document.getElementById('category-checkboxes');
+            categories.forEach(category => {
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.name = 'FilmCategories';
+                checkbox.value = category.id;
+                checkbox.id = 'category-' + category.id;
+    
+                const label = document.createElement('label');
+                label.htmlFor = 'category-' + category.id;
+                label.appendChild(document.createTextNode(category.name));
+    
+                categoryCheckboxes.appendChild(checkbox);
+                categoryCheckboxes.appendChild(label);
+                categoryCheckboxes.appendChild(document.createElement('br'));
+            });
+            
+            document.getElementById('loading-spinner').style.display = 'none';
+        })
+        .catch(error => {
+            console.error('Error fetching categories:', error);
+            document.getElementById('loading-spinner').style.display = 'none';
+        });
+</script>

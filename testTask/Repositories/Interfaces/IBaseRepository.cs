@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace testTask.Repositories.Interfaces;
 
-public interface IBaseRepository<T>
+public interface IBaseRepository<T> where T : class
 {
     Task<List<T>?> FindAllAsync();
     Task<T?> FindByIdAsync(int id);

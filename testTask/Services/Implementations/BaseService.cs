@@ -8,7 +8,7 @@ using testTask.Services.Interfaces;
 
 namespace testTask.Services.Implementations;
 
-public class BaseService<T>(IBaseRepository<T> repository) : IBaseService<T>
+public abstract class BaseService<T>(IBaseRepository<T> repository) : IBaseService<T>
     where T : class, IEntity, new()
 {
     protected readonly IBaseRepository<T> Repository = repository;
@@ -23,20 +23,6 @@ public class BaseService<T>(IBaseRepository<T> repository) : IBaseService<T>
     {
         var entity = await Repository.FindByIdAsync(id);
         return entity;
-    }
-
-    public virtual async Task<List<T>?> FindByConditionAsync(Expression<Func<T, bool>> expression)
-    {
-        var entities = await Repository.FindByConditionAsync(expression);
-        return entities;
-    }
-
-    public virtual async Task CreateAsync(T entity) => await Repository.CreateAsync(entity);
-
-
-    public virtual async Task UpdateAsync(T entity)
-    {
-        await Repository.UpdateAsync(entity);
     }
 
     public virtual async Task DeleteAsync(int id)

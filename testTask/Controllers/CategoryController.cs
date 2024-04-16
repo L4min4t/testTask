@@ -3,10 +3,8 @@ using Microsoft.Extensions.Logging;
 
 namespace testTask.Controllers;
 
-public class CategoryController(ILogger<CategoryController> logger) : Controller
+public class CategoryController() : Controller
 {
-    private readonly ILogger<CategoryController> _logger = logger;
-
     public IActionResult Index()
     {
         return View();

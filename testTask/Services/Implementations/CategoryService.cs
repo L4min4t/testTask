@@ -6,7 +6,7 @@ namespace testTask.Services.Implementations;
 
 public class CategoryService : BaseService<Category>, ICategoryService
 {
-    public CategoryService(IBaseRepository<Category> repository) : base(repository)
+    public CategoryService(ICategoryRepository repository) : base(repository)
     {
     }
 }

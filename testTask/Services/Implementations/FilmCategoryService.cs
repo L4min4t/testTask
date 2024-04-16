@@ -6,7 +6,7 @@ namespace testTask.Services.Implementations;
 
 public class FilmCategoryService : BaseService<FilmCategory>, IFilmCategoryService
 {
-    public FilmCategoryService(IBaseRepository<FilmCategory> repository) : base(repository)
+    public FilmCategoryService(IFilmCategoryRepository repository) : base(repository)
     {
     }
 }

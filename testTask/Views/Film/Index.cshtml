@@ -1,1 +1,48 @@
-﻿<h1>films</h1>
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+
+@model List<testTask.Entities.Film>
+
+@{
+    ViewData["Title"] = "All films";
+}
+
+<a asp-controller="Film" asp-action="Create" class="btn btn-primary">
+    <i class="fas fa-plus" style="margin-right: 5px;"></i> Add Film
+</a>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Director</th>
+                <th>Release Date</th>
+                <th>Category</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var film in Model)
+            {
+                <tr>
+                    <td>@film.Id</td>
+                    <td>@film.Name</td>
+                    <td>@film.Director</td>
+                    <td>@film.Release</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info" role="alert">
+        No films added yet.
+    </div>
+}
+
+<script>
+    var myObject = @Html.Raw(Model);
+    console.log(myObject);
+</script>
