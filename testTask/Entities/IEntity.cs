@@ -1,0 +1,7 @@
+﻿namespace testTask.Entities
+{
+    public interface IEntity
+    {
+        int Id { get; set; }
+    }
+}
