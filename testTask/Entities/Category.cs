@@ -1,4 +1,6 @@
-﻿namespace testTask.Entities
+﻿using System.Collections.Generic;
+
+namespace testTask.Entities
 {
     public class Category : IEntity
     {

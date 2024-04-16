@@ -1,4 +1,7 @@
-﻿namespace testTask.Entities
+﻿using System;
+using System.Collections.Generic;
+
+namespace testTask.Entities
 {
     public class Film : IEntity
     {

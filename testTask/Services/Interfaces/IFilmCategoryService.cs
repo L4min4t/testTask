@@ -4,5 +4,4 @@ namespace testTask.Services.Interfaces;
 
 public interface IFilmCategoryService : IBaseService<FilmCategory>
 {
-    
 }

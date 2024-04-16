@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace testTask.Controllers;
 
@@ -10,5 +11,4 @@ public class FilmController(ILogger<FilmController> logger) : Controller
     {
         return View();
     }
-
 }
