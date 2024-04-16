@@ -1,9 +1,6 @@
-using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using testTask.Context;
+using testTask.Entities;
 using testTask.Repositories.Implementations;
 using testTask.Repositories.Interfaces;
 using testTask.Services.Implementations;
@@ -11,18 +8,18 @@ using testTask.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddScoped<IBaseRepository<Film>, FilmRepository>();
+builder.Services.AddScoped<IBaseRepository<Category>, CategoryRepository>();
+builder.Services.AddScoped<IBaseRepository<FilmCategory>, FilmCategoryRepository>();
+
+builder.Services.AddScoped<IBaseService<Film>, FilmService>();
+builder.Services.AddScoped<IBaseService<Category>, CategoryService>();
+builder.Services.AddScoped<IBaseService<FilmCategory>, FilmCategoryService>();
+
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<ApplicationContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-builder.Services.AddScoped<IFilmRepository, FilmRepository>();
-builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-builder.Services.AddScoped<IFilmCategoryRepository, FilmCategoryRepository>();
-
-builder.Services.AddScoped<IFilmService, FilmService>();
-builder.Services.AddScoped<ICategoryService, CategoryService>();
-builder.Services.AddScoped<IFilmCategoryService, FilmCategoryService>();
 
 var app = builder.Build();
 
