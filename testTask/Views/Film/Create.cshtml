@@ -1,5 +1,9 @@
 @model CreateFilmModel
 
+@{
+    ViewData["Title"] = "Creating film";
+}
+
 <form id="film-form" asp-controller="Film" asp-action="Create" method="post" class="w-50 mx-auto mt-5">
     <div class="form-group">
         <label for="Name" class="fs-5">Name</label>
@@ -34,6 +38,8 @@
 <script>
     document.getElementById('loading-spinner').style.display = 'block';
     
+    var filmCategories = @Html.Raw(Json.Serialize(Model == null ? new List<int>() : Model.FilmCategories));
+    
     fetch('/api/CategoryApi')
         .then(response => response.json())
         .then(categories => {
@@ -44,6 +50,7 @@
                 checkbox.name = 'FilmCategories';
                 checkbox.value = category.id;
                 checkbox.id = 'category-' + category.id;
+                checkbox.checked = filmCategories.includes(category.id);
     
                 const label = document.createElement('label');
                 label.htmlFor = 'category-' + category.id;
@@ -54,7 +61,11 @@
                 categoryCheckboxes.appendChild(document.createElement('br'));
             });
             
+            // Hide loading spinner
             document.getElementById('loading-spinner').style.display = 'none';
+            
+            // Check if categories from API match selected categories
+            checkSelectedCategories(categories);
         })
         .catch(error => {
             console.error('Error fetching categories:', error);

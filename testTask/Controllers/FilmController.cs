@@ -11,17 +11,16 @@ public class FilmController : Controller
 {
     private readonly IFilmService _service;
 
-    public FilmController (IFilmService service)
+    public FilmController(IFilmService service)
     {
         _service = service;
     }
 
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string sortOrder)
     {
         var films = await _service.FindAllAsync();
-        
         return View(films);
-    } 
+    }
 
     public IActionResult Create() => View();
 
@@ -37,7 +36,7 @@ public class FilmController : Controller
 
         return View(filmModel);
     }
-    
+
     [HttpDelete]
     public async Task<IActionResult> Delete(int id)
     {
@@ -46,6 +45,12 @@ public class FilmController : Controller
     }
 
     public async Task<IActionResult> Edit(int id)
+    {
+        var film = await _service.FindByIdAsync(id);
+        return View(film);
+    }
+
+    public async Task<IActionResult> View(int id)
     {
         var film = await _service.FindByIdAsync(id);
         return View(film);
