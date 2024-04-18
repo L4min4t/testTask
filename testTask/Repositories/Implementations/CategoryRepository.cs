@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Data;
+using Dapper;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using testTask.Context;
 using testTask.Entities;
 using testTask.Repositories.Interfaces;
@@ -14,8 +17,8 @@ public class CategoryRepository : BaseRepository<Category>, ICategoryRepository
     public override async Task<List<Category>?> FindAllAsync()
     {
         return await DbSet
-            .Include(c => c.Films)
             .Include(c => c.ParentCategory)
+            .Include(c => c.Films)
             .ToListAsync();
     }
 }

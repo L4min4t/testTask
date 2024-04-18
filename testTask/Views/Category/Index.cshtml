@@ -58,13 +58,11 @@ else
 }
 
 @functions {
-
     public int GetNestingLevel(testTask.Entities.Category category, int level = 0)
     {
         if (category.ParentCategoryId == null) return level;
         else return GetNestingLevel(category.ParentCategory, level + 1);
     }
-
 }
 
 @section Scripts

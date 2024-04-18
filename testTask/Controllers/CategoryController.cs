@@ -13,16 +13,7 @@ public class CategoryController : Controller
         _service = service;
     }
 
-    public async Task<IActionResult> Index()
-    {
-        var categories = await _service.FindAllAsync();
-        
-        var category = await _service.FindByIdAsync(18);
-        var category1 = await _service.FindByIdAsync(17);
-        var category2 = await _service.FindByIdAsync(18);
-        var category3 = await _service.FindByIdAsync(17);
-        return View(categories);
-    }
+    public async Task<IActionResult> Index() => View(await _service.FindAllAsync());
 
     public IActionResult Create() => View();
 

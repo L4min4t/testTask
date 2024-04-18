@@ -33,12 +33,9 @@ public class ApplicationContext : DbContext
             entity.Property(e => e.Name).IsRequired().HasMaxLength(200);
 
             entity.HasOne(c => c.ParentCategory)
-                .WithOne()
-                .HasForeignKey<Category>(c => c.ParentCategoryId)
-                .IsRequired(false)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            entity.HasIndex(c => c.ParentCategoryId).IsUnique(false);
+                .WithMany(b => b.Children)
+                .HasForeignKey(c => c.ParentCategoryId)
+                .IsRequired(false);
         });
 
         modelBuilder.Entity<Film>()
