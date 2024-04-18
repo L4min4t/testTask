@@ -37,6 +37,49 @@ public class FilmController : Controller
         return View(filmModel);
     }
 
+    [HttpGet]
+    public async Task<IActionResult> Edit(int id)
+    {
+        var film = await _service.FindByIdAsync(id);
+
+        var editModel = new EditFilmModel
+        {
+            Id = film.Id,
+            Name = film.Name,
+            Director = film.Director,
+            Release = film.Release,
+            FilmCategories = film.Categories.Select(fc => fc.Id).ToList()
+        };
+
+        return View(editModel);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(EditFilmModel editModel)
+    {
+        if (ModelState.IsValid)
+        {
+            await _service.UpdateAsync(editModel);
+            return RedirectToAction("View", "Film", new { id = editModel.Id });
+        }
+
+        return View(editModel);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> EditCategories(EditFilmModel editModel)
+    {
+        if (ModelState.IsValid)
+        {
+            await _service.UpdateAsync(editModel);
+            return RedirectToAction("View", "Film", new { id = editModel.Id });
+        }
+
+        return RedirectToAction("View", "Film", new { id = editModel.Id });
+    }
+
     [HttpDelete]
     public async Task<IActionResult> Delete(int id)
     {
@@ -44,11 +87,6 @@ public class FilmController : Controller
         return RedirectToAction("Index");
     }
 
-    public async Task<IActionResult> Edit(int id)
-    {
-        var film = await _service.FindByIdAsync(id);
-        return View(film);
-    }
 
     public async Task<IActionResult> View(int id)
     {

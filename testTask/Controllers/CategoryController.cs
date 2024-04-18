@@ -1,12 +1,76 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using testTask.Models;
+using testTask.Services.Interfaces;
 
 namespace testTask.Controllers;
 
-public class CategoryController() : Controller
+public class CategoryController : Controller
 {
-    public IActionResult Index()
+    private readonly ICategoryService _service;
+
+    public CategoryController(ICategoryService service)
     {
-        return View();
+        _service = service;
+    }
+
+    public async Task<IActionResult> Index()
+    {
+        var categories = await _service.FindAllAsync();
+        
+        var category = await _service.FindByIdAsync(18);
+        var category1 = await _service.FindByIdAsync(17);
+        var category2 = await _service.FindByIdAsync(18);
+        var category3 = await _service.FindByIdAsync(17);
+        return View(categories);
+    }
+
+    public IActionResult Create() => View();
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(CreateCategoryModel createCategoryModel)
+    {
+        if (ModelState.IsValid)
+        {
+            await _service.CreateAsync(createCategoryModel);
+            return RedirectToAction("Index", "Category");
+        }
+
+        return View(createCategoryModel);
+    }
+
+    [HttpDelete]
+    public async Task<IActionResult> Delete(int id)
+    {
+        await _service.DeleteAsync(id);
+        return RedirectToAction("Index", "Category");
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Edit(int id)
+    {
+        var category = await _service.FindByIdAsync(id);
+
+        var editModel = new EditCategoryModel
+        {
+            Id = category.Id,
+            Name = category.Name,
+            ParentCategoryId = category.ParentCategoryId,
+        };
+
+        return View(editModel);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(EditCategoryModel editModel)
+    {
+        if (ModelState.IsValid)
+        {
+            await _service.UpdateAsync(editModel);
+            return RedirectToAction("Index", "Category");
+        }
+
+        return View(editModel);
     }
 }

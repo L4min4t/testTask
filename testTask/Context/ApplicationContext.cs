@@ -35,7 +35,10 @@ public class ApplicationContext : DbContext
             entity.HasOne(c => c.ParentCategory)
                 .WithOne()
                 .HasForeignKey<Category>(c => c.ParentCategoryId)
-                .IsRequired(false);
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasIndex(c => c.ParentCategoryId).IsUnique(false);
         });
 
         modelBuilder.Entity<Film>()

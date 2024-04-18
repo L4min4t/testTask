@@ -12,8 +12,8 @@ using testTask.Context;
 namespace testTask.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20240416211632_changedManyToManyRelationship")]
-    partial class changedManyToManyRelationship
+    [Migration("20240418153500_AddedConstraintCategoryTable")]
+    partial class AddedConstraintCategoryTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -112,7 +112,8 @@ namespace testTask.Migrations
                 {
                     b.HasOne("testTask.Entities.Category", "ParentCategory")
                         .WithOne()
-                        .HasForeignKey("testTask.Entities.Category", "ParentCategoryId");
+                        .HasForeignKey("testTask.Entities.Category", "ParentCategoryId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("ParentCategory");
                 });

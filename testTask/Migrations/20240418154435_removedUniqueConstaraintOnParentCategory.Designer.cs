@@ -12,8 +12,8 @@ using testTask.Context;
 namespace testTask.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20240415173244_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240418154435_removedUniqueConstaraintOnParentCategory")]
+    partial class removedUniqueConstaraintOnParentCategory
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,21 @@ namespace testTask.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("FilmCategory", b =>
+                {
+                    b.Property<int>("FilmId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.HasKey("FilmId", "CategoryId");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("FilmCategories", (string)null);
+                });
 
             modelBuilder.Entity("testTask.Entities.Category", b =>
                 {
@@ -43,9 +58,7 @@ namespace testTask.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ParentCategoryId")
-                        .IsUnique()
-                        .HasFilter("[ParentCategoryId] IS NOT NULL");
+                    b.HasIndex("ParentCategoryId");
 
                     b.ToTable("Categories");
                 });
@@ -76,63 +89,31 @@ namespace testTask.Migrations
                     b.ToTable("Films");
                 });
 
-            modelBuilder.Entity("testTask.Entities.FilmCategory", b =>
+            modelBuilder.Entity("FilmCategory", b =>
                 {
-                    b.Property<int>("FilmId")
-                        .HasColumnType("int");
+                    b.HasOne("testTask.Entities.Category", null)
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_FilmCategory_CategoryId");
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.HasKey("FilmId", "CategoryId");
-
-                    b.HasIndex("CategoryId");
-
-                    b.ToTable("FilmCategories");
+                    b.HasOne("testTask.Entities.Film", null)
+                        .WithMany()
+                        .HasForeignKey("FilmId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_FilmCategory_FilmId");
                 });
 
             modelBuilder.Entity("testTask.Entities.Category", b =>
                 {
                     b.HasOne("testTask.Entities.Category", "ParentCategory")
                         .WithOne()
-                        .HasForeignKey("testTask.Entities.Category", "ParentCategoryId");
+                        .HasForeignKey("testTask.Entities.Category", "ParentCategoryId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("ParentCategory");
-                });
-
-            modelBuilder.Entity("testTask.Entities.FilmCategory", b =>
-                {
-                    b.HasOne("testTask.Entities.Category", "Category")
-                        .WithMany("FilmCategories")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("testTask.Entities.Film", "Film")
-                        .WithMany("FilmCategories")
-                        .HasForeignKey("FilmId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
-
-                    b.Navigation("Film");
-                });
-
-            modelBuilder.Entity("testTask.Entities.Category", b =>
-                {
-                    b.Navigation("FilmCategories");
-                });
-
-            modelBuilder.Entity("testTask.Entities.Film", b =>
-                {
-                    b.Navigation("FilmCategories");
                 });
 #pragma warning restore 612, 618
         }
