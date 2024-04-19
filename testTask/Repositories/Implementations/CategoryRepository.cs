@@ -14,11 +14,8 @@ public class CategoryRepository : BaseRepository<Category>, ICategoryRepository
     {
     }
 
-    public override async Task<List<Category>?> FindAllAsync()
-    {
-        return await DbSet
-            .Include(c => c.ParentCategory)
-            .Include(c => c.Films)
-            .ToListAsync();
-    }
+    public override async Task<List<Category>?> FindAllAsync() => await DbSet
+        .Include(c => c.ParentCategory)
+        .Include(c => c.Films)
+        .ToListAsync();
 }

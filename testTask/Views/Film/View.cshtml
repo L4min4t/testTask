@@ -1,46 +1,43 @@
-@model testTask.Entities.Film
+@model ViewFilmModel
 
 
 @{
-    ViewData["Title"] = Model.Name;
+    ViewData["Title"] = Model?.Name ?? "Film";
 }
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-6 offset-md-3">
-            <div class="card">
-                <div class="card-body">
-                    <h1 class="card-title">@Model.Name</h1>
-                    <p class="card-text fs-5">Directed by: @Model.Director</p>
-                    <p class="card-text fs-5">Release Date: @Model.Release.Date.ToString("yyyy-MM-dd")</p>
-                    <p class="card-text fs-5">
-                        Categories:
-                        @if (Model.Categories.Any())
-                        {
+
+
+@if (Model != null)
+{
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title">@Model.Name</h1>
+                        <p class="card-text fs-5">Directed by: @Model.Director</p>
+                        <p class="card-text fs-5">Release Date: @Model.Release.Date.ToString("yyyy-MM-dd")</p>
+                        <p class="card-text fs-5">
+                            Categories:
                             <span class="fs-6">
-                                |
-                                @foreach (var category in Model.Categories)
-                                {
-                                    <span>@category.Name |</span>
-                                }
+                                @Model.GetStringOfCategories()
                             </span>
-                        }
-                        else
+                        </p>
+
+                        @await Html.PartialAsync("_CategoryUpdateForm", new EditFilmCategoriesModel()
                         {
-                            <span class="fs-6">no category</span>
-                        }
-                    </p>
+                            Id = Model.Id,
+                            FilmCategories = Model.Categories.Select(c => c.Id).ToList()
+                        })
 
-                    @await Html.PartialAsync("_CategoryUpdateForm", new EditFilmModel()
-                    {
-                        Id = Model.Id,
-                        Name = Model.Name,
-                        Director = Model.Director,
-                        Release = Model.Release,
-                        FilmCategories = Model.Categories.Select(c => c.Id).ToList()
-                    })
-
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+}
+else
+{
+    <div class="alert alert-warning mt-3" role="alert">
+        The source that you are trying to access doesn't exist or has been removed.
+    </div>
+}

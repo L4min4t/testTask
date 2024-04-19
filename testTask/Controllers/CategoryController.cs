@@ -13,7 +13,7 @@ public class CategoryController : Controller
         _service = service;
     }
 
-    public async Task<IActionResult> Index() => View(await _service.FindAllAsync());
+    public async Task<IActionResult> Index() => View(await _service.GetViewCategoryModelsAsync());
 
     public IActionResult Create() => View();
 
@@ -30,27 +30,8 @@ public class CategoryController : Controller
         return View(createCategoryModel);
     }
 
-    [HttpDelete]
-    public async Task<IActionResult> Delete(int id)
-    {
-        await _service.DeleteAsync(id);
-        return RedirectToAction("Index", "Category");
-    }
-
     [HttpGet]
-    public async Task<IActionResult> Edit(int id)
-    {
-        var category = await _service.FindByIdAsync(id);
-
-        var editModel = new EditCategoryModel
-        {
-            Id = category.Id,
-            Name = category.Name,
-            ParentCategoryId = category.ParentCategoryId,
-        };
-
-        return View(editModel);
-    }
+    public async Task<IActionResult> Edit(int id) => View(await _service.GetEditCategoryModelAsync(id));
 
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -63,5 +44,12 @@ public class CategoryController : Controller
         }
 
         return View(editModel);
+    }
+
+    [HttpDelete]
+    public async Task<IActionResult> Delete(int id)
+    {
+        await _service.DeleteAsync(id);
+        return RedirectToAction("Index", "Category");
     }
 }

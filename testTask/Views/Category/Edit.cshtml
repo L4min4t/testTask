@@ -4,34 +4,37 @@
     ViewData["Title"] = "Editing category";
 }
 
-<form id="category-form" asp-controller="Category" asp-action="Edit" method="post" class="w-50 mx-auto mt-5">
-    <div class="form-group">
-        <label for="Name" class="fs-5">Name</label>
-        <input type="text" asp-for="Name" class="form-control"/>
-        <span asp-validation-for="Name" class="text-danger"></span>
-    </div>
 
-    <div class="form-group">
-        <label for="ParentCategoryId" class="fs-5">Choose parent category</label>
-        <div id="category-radiobuttons">
-            <div id="loading-spinner" style="display: none;">
-                <i class="fa fa-spinner fa-spin"></i> Loading Categories...
-            </div>
+@if (Model != null)
+{
+    <form id="category-form" asp-controller="Category" asp-action="Edit" method="post" class="w-50 mx-auto mt-5">
+        <div class="form-group">
+            <label for="Name" class="fs-5">Name</label>
+            <input type="text" asp-for="Name" class="form-control"/>
+            <span asp-validation-for="Name" class="text-danger"></span>
         </div>
-        <span asp-validation-for="ParentCategoryId" class="text-danger"></span>
-    </div>
 
-    <button type="submit" class="btn btn-primary mt-4" id="submit-button">Update</button>
-</form>
+        <div class="form-group">
+            <label for="ParentCategoryId" class="fs-5">Choose parent category</label>
+            <div id="category-radiobuttons">
+                <div id="loading-spinner" style="display: none;">
+                    <i class="fa fa-spinner fa-spin"></i> Loading Categories...
+                </div>
+            </div>
+            <span asp-validation-for="ParentCategoryId" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-4" id="submit-button">Update</button>
+    </form>
 
 
-<script>
+    <script>
     document.getElementById('loading-spinner').style.display = 'block';
     
     var parentCategory = @Html.Raw(Json.Serialize(Model == null ? -1 : Model.ParentCategoryId));
     var categoryId = @Html.Raw(Json.Serialize(Model == null ? -1 : Model.Id));
     
-    fetch('/api/CategoryApi')
+    fetch(`/api/CategoryApi/inherit-available/${categoryId}`)
         .then(response => response.json())
         .then(categories => {
             const categoryRadiobuttons = document.getElementById('category-radiobuttons');
@@ -78,3 +81,10 @@
             document.getElementById('loading-spinner').style.display = 'none';
         });
 </script>
+}
+else
+{
+    <div class="alert alert-warning mt-3" role="alert">
+        The source that you are trying to access doesn't exist or has been removed.
+    </div>
+}

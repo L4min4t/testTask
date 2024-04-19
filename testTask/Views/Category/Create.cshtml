@@ -28,7 +28,7 @@
 <script>
     document.getElementById('loading-spinner').style.display = 'block';
     
-    fetch('/api/CategoryApi')
+    fetch('/api/CategoryApi/inherit-available/')
         .then(response => response.json())
         .then(categories => {
             const categoryRadiobuttons = document.getElementById('category-radiobuttons');

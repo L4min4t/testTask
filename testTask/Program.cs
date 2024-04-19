@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using testTask.Context;
-using testTask.Entities;
+using testTask.Middleware;
 using testTask.Repositories.Implementations;
 using testTask.Repositories.Interfaces;
 using testTask.Services.Implementations;
@@ -24,11 +24,9 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 var app = builder.Build();
 
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
-}
+app.UseErrorHandlingMiddleware();
+
+app.UseHsts();
 
 app.UseHttpsRedirection();
 

@@ -1,114 +1,116 @@
 ﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
 
-@model List<testTask.Entities.Film>
+@model List<ViewFilmModel>?
 
 @{
     ViewData["Title"] = "Films";
 }
 
 
-@if (Model != null && Model.Any())
+@if (Model != null)
 {
-    <div class="container">
-        <div class="row align-items-end">
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label class="fs-5">New Film:</label>
-                    <a asp-controller="Film" asp-action="Create" class="btn btn-primary" style="width: 100%;">
-                        Add Film
-                    </a>
+    @if (Model.Any())
+    {
+        <div class="container">
+            <div class="row align-items-end">
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="fs-5">New Film:</label>
+                        <a asp-controller="Film" asp-action="Create" class="btn btn-primary" style="width: 100%;">
+                            Add Film
+                        </a>
+                    </div>
                 </div>
-            </div>
 
-            <div class="col-md-5">
-                <div class="form-group">
-                    <label for="directorFilter" class="fs-5">Filter by Director:</label>
-                    <select id="directorFilter" class="form-control">
-                        <option value="">All Directors</option>
-                        @foreach (var director in Model.Select(f => f.Director).Distinct())
-                        {
-                            <option value="@director">@director</option>
-                        }
-                    </select>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label for="directorFilter" class="fs-5">Filter by Director:</label>
+                        <select id="directorFilter" class="form-control">
+                            <option value="">All Directors</option>
+                            @foreach (var director in Model.Select(f => f.Director).Distinct())
+                            {
+                                <option value="@director">@director</option>
+                            }
+                        </select>
+                    </div>
                 </div>
-            </div>
 
-            <div class="col-md-5">
-                <div class="form-group">
-                    <label for="categoryFilter" class="fs-5">Filter by Category:</label>
-                    <select id="categoryFilter" class="form-control">
-                        <option value="">All Categories</option>
-                        @foreach (var category in Model.SelectMany(f => f.Categories).Select(c => c.Name).Distinct())
-                        {
-                            <option value="@category">@category</option>
-                        }
-                    </select>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label for="categoryFilter" class="fs-5">Filter by Category:</label>
+                        <select id="categoryFilter" class="form-control">
+                            <option value="">All Categories</option>
+                            @foreach (var categoryName in Model.SelectMany(f => f.Categories).Select(c => c.Name).Distinct())
+                            {
+                                <option value="@categoryName">@categoryName</option>
+                            }
+                        </select>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <table id="filmTable" class="table table-bordered mt-4">
-        <thead>
-        <tr>
-            <th class="fs-5">Name</th>
-            <th class="fs-5">Director</th>
-            <th class="fs-5">
-                <div style="display: flex; align-items: flex-end;">
-                    Release Date
-                    <button type="button" class="btn btn-link sortBtn" data-sort="asc">
-                        <i class="fas fa-arrow-up fa-sm"></i>
-                    </button>
-                    <button type="button" class="btn btn-link sortBtn" data-sort="desc">
-                        <i class="fas fa-arrow-down fa-sm"></i>
-                    </button>
-                </div>
-
-            </th>
-            <th class="fs-5">Category</th>
-            <th class="fs-5">Manage</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var film in Model)
-        {
+        <table id="filmTable" class="table table-bordered mt-4">
+            <thead>
             <tr>
-                <td>@film.Name</td>
-                <td>@film.Director</td>
-                <td>@film.Release.Date.ToString("yyyy-MM-dd")</td>
-                <td>@string.Join(", ", film.Categories.Select(c => c.Name))</td>
-                <td>
-                    <a asp-controller="Film" asp-action="View" asp-route-id="@film.Id" class="btn btn-primary"
-                       style="margin-right: 10px;">
-                        View
-                    </a>
-                    <a asp-controller="Film" asp-action="Edit" asp-route-id="@film.Id" class="btn btn-warning"
-                       style="margin-right: 10px;">
-                        Edit
-                    </a>
-                    <button type="button" class="btn btn-danger" onclick="deleteFilm(@film.Id)">Delete</button>
-                </td>
-            </tr>
-        }
-        </tbody>
-    </table>
-}
-else
-{
-    <div class="col-md-2">
-        <div class="form-group">
-            <label class="fs-5">New Film:</label>
-            <a asp-controller="Film" asp-action="Create" class="btn btn-primary" style="width: 100%;">
-                Add Film
-            </a>
-        </div>
-    </div>
-    <div class="alert alert-info mt-3" role="alert">
-        No films added yet.
-    </div>
-}
+                <th class="fs-5">Name</th>
+                <th class="fs-5">Director</th>
+                <th class="fs-5">
+                    <div style="display: flex; align-items: flex-end;">
+                        Release Date
+                        <button type="button" class="btn btn-link sortBtn" data-sort="asc">
+                            <i class="fas fa-arrow-up fa-sm"></i>
+                        </button>
+                        <button type="button" class="btn btn-link sortBtn" data-sort="desc">
+                            <i class="fas fa-arrow-down fa-sm"></i>
+                        </button>
+                    </div>
 
-@section Scripts {
-    <script>
+                </th>
+                <th class="fs-5">Category</th>
+                <th class="fs-5">Manage</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var film in Model)
+            {
+                <tr>
+                    <td>@film.Name</td>
+                    <td>@film.Director</td>
+                    <td>@film.GetFormattedReleaseDate()</td>
+                    <td>@film.GetStringOfCategoriesSeparatedByComma()</td>
+                    <td>
+                        <a asp-controller="Film" asp-action="View" asp-route-id="@film.Id" class="btn btn-primary"
+                           style="margin-right: 10px;">
+                            View
+                        </a>
+                        <a asp-controller="Film" asp-action="Edit" asp-route-id="@film.Id" class="btn btn-warning"
+                           style="margin-right: 10px;">
+                            Edit
+                        </a>
+                        <button type="button" class="btn btn-danger" onclick="deleteFilm(@film.Id)">Delete</button>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="fs-5">New Film:</label>
+                <a asp-controller="Film" asp-action="Create" class="btn btn-primary" style="width: 100%;">
+                    Add Film
+                </a>
+            </div>
+        </div>
+        <div class="alert alert-info mt-3" role="alert">
+            No films added yet.
+        </div>
+    }
+
+    @section Scripts {
+        <script>
         $(document).ready(function() {
             $(".sortBtn").click(function() {
                 var sortDirection = $(this).data("sort");
@@ -174,4 +176,11 @@ else
             }
         }
     </script>
+    }
+}
+else
+{
+    <div class="alert alert-warning mt-3" role="alert">
+        The source that you are trying to access doesn't exist or has been removed.
+    </div>
 }

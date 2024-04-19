@@ -4,6 +4,7 @@
     ViewData["Title"] = "Creating film";
 }
 
+
 <form id="film-form" asp-controller="Film" asp-action="Create" method="post" class="w-50 mx-auto mt-5">
     <div class="form-group">
         <label for="Name" class="fs-5">Name</label>
@@ -62,10 +63,8 @@
                 categoryCheckboxes.appendChild(document.createElement('br'));
             });
             
-            // Hide loading spinner
             document.getElementById('loading-spinner').style.display = 'none';
             
-            // Check if categories from API match selected categories
             checkSelectedCategories();
         })
         .catch(error => {
@@ -73,7 +72,6 @@
             document.getElementById('loading-spinner').style.display = 'none';
         });
 
-    // Function to check if at least one category is selected
     function checkSelectedCategories() {
         const checkboxes = document.querySelectorAll('input[name="FilmCategories"]');
         const submitButton = document.getElementById('submit-button');
@@ -87,13 +85,11 @@
             });
         });
 
-        // Initial check on page load
         const atLeastOneChecked = [...checkboxes].some(checkbox => checkbox.checked);
         submitButton.disabled = !atLeastOneChecked;
         validationError.style.display = atLeastOneChecked ? 'none' : 'block';
     }
 
-    // Prevent form submission if no category is selected
     document.getElementById('film-form').addEventListener('submit', function(event) {
         const checkboxes = document.querySelectorAll('input[name="FilmCategories"]');
         const atLeastOneChecked = [...checkboxes].some(checkbox => checkbox.checked);

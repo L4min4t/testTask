@@ -1,25 +1,26 @@
-@model EditFilmModel
+@model EditFilmCategoriesModel
 
-<form id="film-form" asp-controller="Film" asp-action="EditCategories" method="post">
-    <input type="hidden" asp-for="@Model.Id" class="form-control"/>
-    <input type="hidden" asp-for="@Model.Name" class="form-control"/>
-    <input type="hidden" asp-for="@Model.Director" class="form-control"/>
-    <input type="hidden" asp-for="@Model.Release" class="form-control"/>
-    <div class="form-group">
-        <label for="@Model.FilmCategories" class="fs-5">Edit categories</label>
-        <span id="category-validation-error" class="text-danger" style="display: none;">Please select at least one category.</span>
-        <div id="category-checkboxes">
-            <div id="loading-spinner" style="display: none;">
-                <i class="fa fa-spinner fa-spin"></i> Loading Categories...
+
+@if (Model != null)
+{
+    <form id="film-form" asp-controller="Film" asp-action="EditFilmCategories" method="post">
+        <input type="hidden" asp-for="Id" />
+        
+        <div class="form-group">
+            <label for="@Model.FilmCategories" class="fs-5">Edit categories</label>
+            <span id="category-validation-error" class="text-danger" style="display: none;">Please select at least one category.</span>
+            <div id="category-checkboxes">
+                <div id="loading-spinner" style="display: none;">
+                    <i class="fa fa-spinner fa-spin"></i> Loading Categories...
+                </div>
             </div>
+            <span asp-validation-for="FilmCategories" class="text-danger"></span>
         </div>
-        <span asp-validation-for="FilmCategories" class="text-danger"></span>
-    </div>
 
-    <button type="submit" class="btn btn-primary" id="submit-button">Update</button>
-</form>
+        <button type="submit" class="btn btn-primary" id="submit-button">Update</button>
+    </form>
 
-<script>
+    <script>
     document.getElementById('loading-spinner').style.display = 'block';
     
     var filmCategories = @Html.Raw(Json.Serialize(Model == null ? new List<int>() : Model.FilmCategories));
@@ -70,6 +71,12 @@
                 }
             });
         });
-        
     }
 </script>
+}
+else
+{
+    <div class="alert alert-warning mt-3" role="alert">
+        The source that you are trying to access doesn't exist or has been removed.
+    </div>
+}

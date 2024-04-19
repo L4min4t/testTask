@@ -4,38 +4,41 @@
     ViewData["Title"] = "Editing film";
 }
 
-<form id="film-form" asp-controller="Film" asp-action="Edit" method="post" class="w-50 mx-auto mt-5">
-    <div class="form-group">
-        <label for="Name" class="fs-5">Name</label>
-        <input type="text" asp-for="Name" class="form-control"/>
-        <span asp-validation-for="Name" class="text-danger"></span>
-    </div>
-    <div class="form-group ">
-        <label for="Director" class="fs-5">Director</label>
-        <input type="text" asp-for="Director" class="form-control"/>
-        <span asp-validation-for="Director" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label for="Release" class="fs-5">Release Date</label>
-        <input type="date" asp-for="Release" class="form-control"/>
-        <span asp-validation-for="Release" class="text-danger"></span>
-    </div>
 
-    <div class="form-group">
-        <label for="FilmCategories" class="fs-5">Categories</label>
-        <span id="category-validation-error" class="text-danger" style="display: none;">Please select at least one category.</span>
-        <div id="category-checkboxes">
-            <div id="loading-spinner" style="display: none;">
-                <i class="fa fa-spinner fa-spin"></i> Loading Categories...
+@if (Model != null)
+{
+    <form id="film-form" asp-controller="Film" asp-action="Edit" method="post" class="w-50 mx-auto mt-5">
+        <div class="form-group">
+            <label for="Name" class="fs-5">Name</label>
+            <input type="text" asp-for="Name" class="form-control"/>
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group ">
+            <label for="Director" class="fs-5">Director</label>
+            <input type="text" asp-for="Director" class="form-control"/>
+            <span asp-validation-for="Director" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label for="Release" class="fs-5">Release Date</label>
+            <input type="date" asp-for="Release" class="form-control"/>
+            <span asp-validation-for="Release" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="FilmCategories" class="fs-5">Categories</label>
+            <span id="category-validation-error" class="text-danger" style="display: none;">Please select at least one category.</span>
+            <div id="category-checkboxes">
+                <div id="loading-spinner" style="display: none;">
+                    <i class="fa fa-spinner fa-spin"></i> Loading Categories...
+                </div>
             </div>
         </div>
-    </div>
 
-    <button type="submit" class="btn btn-primary" id="submit-button">Update</button>
-</form>
+        <button type="submit" class="btn btn-primary" id="submit-button">Update</button>
+    </form>
 
 
-<script>
+    <script>
     document.getElementById('loading-spinner').style.display = 'block';
     
     var filmCategories = @Html.Raw(Json.Serialize(Model == null ? new List<int>() : Model.FilmCategories));
@@ -61,10 +64,8 @@
                 categoryCheckboxes.appendChild(document.createElement('br'));
             });
             
-            // Hide loading spinner
             document.getElementById('loading-spinner').style.display = 'none';
             
-            // Check if categories from API match selected categories
             checkSelectedCategories();
         })
         .catch(error => {
@@ -85,13 +86,11 @@
             });
         });
 
-        // Initial check on page load
         const atLeastOneChecked = [...checkboxes].some(checkbox => checkbox.checked);
         submitButton.disabled = !atLeastOneChecked;
         validationError.style.display = atLeastOneChecked ? 'none' : 'block';
     }
 
-    // Prevent form submission if no category is selected
     document.getElementById('film-form').addEventListener('submit', function(event) {
         const checkboxes = document.querySelectorAll('input[name="FilmCategories"]');
         const atLeastOneChecked = [...checkboxes].some(checkbox => checkbox.checked);
@@ -102,3 +101,10 @@
         }
     });
 </script>
+}
+else
+{
+    <div class="alert alert-warning mt-3" role="alert">
+        The source that you are trying to access doesn't exist or has been removed.
+    </div>
+}
